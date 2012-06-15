@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import subprocess
+import os
+import re
+import sys
+
+
+def get_config():
+    """
+    Run subrocess on ssh config and get the contents
+    """
+    home = os.environ['HOME']
+    cmd = 'cat %s/.ssh/config' % home
+    return subprocess.check_output(cmd, shell=True)
+
+
+def get_hosts(config_data):
+    """
+    Match hosts names with host and get dictionary
+    TODO: Make it an ordered dict
+    """
+    pattern = re.compile('#\s+--\s+([^\n]+)\nHost\s+([^\n]+)', re.I | re.M)
+    hosts = re.findall(pattern, config_data)
+
+    return dict(hosts)
+
+
+def print_hosts(hosts):
+    """
+    Print out the hosts enumerated
+    """
+    for label in enumerate(sorted(hosts.keys())):
+        print '%d %s' % (label[0], label[1])
+
+
+if __name__ == "__main__":
+    # get all the hosts and print the menu
+    config_data = get_config()
+    hosts = get_hosts(config_data)
+    host_keys = sorted(hosts.keys())
+    print_hosts(hosts)
+
+    # allow input to choose host
+    print "Choose Host:",
+    host = raw_input()
+
+    # validation checks
+    if not host.isdigit():
+        sys.exit('Please enter a numeric value ..')
+
+    try:
+        chosen_host = host_keys[int(host)]
+    except IndexError:
+        sys.exit('Please choose a host that is on the list ..')
+    
+    # copy command to clipboard
+    # TODO: Make this more cross OS compatible
+    subprocess.call('echo "ssh %s" | pbcopy' % hosts[chosen_host], shell=True)
+
+    # give the ssh command
+    print 'ssh %s' % hosts[chosen_host]
+    

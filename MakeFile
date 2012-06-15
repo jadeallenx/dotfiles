@@ -1,0 +1,39 @@
+install: install-vim install-bash install-virtualenvwrapper \
+         install-git install-screen install-bin install-vcprompt
+
+install-vim:
+	rm -rf ~/.vim ~/.vimrc
+	ln -s `pwd`/vim ~/.vim
+	ln -s ~/.vim/vimrc ~/.vimrc
+
+install-bash:
+	rm -f ~/.bashrc
+	ln -s `pwd`/bash/bashrc ~/.bashrc
+
+install-git:
+	rm -f ~/.gitconfig
+	ln -s `pwd`/git/gitconfig ~/.gitconfig
+	rm -f ~/.gitignore_global
+	ln -s `pwd`/git/gitignore_global ~/.gitignore_global
+
+install-virtualenvwrapper:
+	mkdir -p ~/.virtualenv
+	rm -f ~/.virtualenv/post*
+	rm -f ~/.virtualenv/pre*
+	rm -f ~/.virtualenv/get_env*
+	rm -f ~/.virtualenv/initialize
+	ln -s `pwd`/virtualenvwrapper/* ~/.virtualenv
+
+install-screen:
+	rm -f ~/.screenrc
+	ln -s `pwd`/screen/screenrc ~/.screenrc
+
+install-bin:
+	rm -f ~/bin/amail ~/bin/gethosts ~/bin/sync_code
+	ln -s `pwd`/bin/amail ~/bin/amail
+	ln -s `pwd`/bin/gethosts ~/bin/gethosts
+	ln -s `pwd`/bin/sync_code ~/bin/sync_code
+
+install-vcprompt:
+	rm -f ~/bin/vcprompt
+	ln -s `pwd`/vcprompt/vcprompt ~/bin/vcprompt

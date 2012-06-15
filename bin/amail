@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# defaults that need to be passed
+ATTACHMENT=$1
+SUBJECT=$2
+EMAIL=$3
+
+FROM_EMAIL=$EMAIL
+SMTP_SERVER="smtp.gmail.com"
+SMTP_PORT=587
+SMTP_USER=$EMAIL
+
+# usage definition
+function usage() {
+    echo "USAGE: $BASENAME <attachement> \"<subject>\" <email>"
+    exit 0
+}
+
+# help usage
+while getopts "h" arg
+do
+  case $arg in
+    h) usage;;
+    *) usage;;
+  esac
+done
+
+# test for all arguments
+if [ $# -ne 3 ]; then
+  usage
+fi
+
+# check the attachment
+if [ ! -f $ATTACHMENT ]; then
+  echo "Attachment must be a file"
+  exit 2
+fi
+
+# check for a subject
+if [ ! "$SUBJECT" ]; then
+  echo "You must specify a subject"
+  exit 2
+fi
+
+# Validate the email
+REGEX="*@?*.?*"
+if [[ $EMAIL != $REGEX ]]; then
+  echo "Please give a valid email"
+  exit 2
+fi
+
+echo -n "Please enter your email password: "
+read -s SMTP_PASSWORD
+
+# send the attachement email
+sendemail -f $FROM_EMAIL -a $ATTACHMENT -u "$SUBJECT" -t $EMAIL -s $SMTP_SERVER:$SMTP_PORT -xu $SMTP_USER -xp $SMTP_PASSWORD -o tls=yes
+

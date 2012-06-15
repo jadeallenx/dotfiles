@@ -1,0 +1,100 @@
+#!/bin/bash
+
+#: usage 
+#: sync_code -u gzangirolami -s ebin -c ~/Alertlogic/repos/git/user-interface/ -r /home/gzangirolami/public_html/user-interface
+
+TIMESTAMP=$(date +%s)
+DEFAULT_LOG_PATH="$HOME/.rsync_log"
+LOG_FILE="$DEFAULT_LOG_PATH/$TIMESTAMP.log"
+
+#: defaults
+USERNAME=""
+EXCLUSIONS=""
+CODE_BASE=""
+BASE_REMOTE_PATH=""
+SERVER=""
+
+#: set the internal file separater
+IFS=","
+
+function usage() {
+    echo "$0 -u <username> -s <server> -c <path_to_code> -r <remote_path_to_code>"
+    echo "Required parameters:"
+    echo " -u <username> Remote username"
+    echo " -c <path> Path to codebase to rsync."
+    echo " -s <server> Server to rsync to."
+    echo " -r <path> Remote path to rsync to."
+    echo ""
+    echo "Optional Parameters:"
+    echo " -l <path_and_filename> Optional log file override (defaults to $DEFAULT_LOG_PATH)"
+    echo " -e '<paths>' Comma delimited set of paths to exclude"
+    echo " -h help"
+}
+
+while getopts "u:s:c:r:e:h" arg
+do
+  case $arg in
+    u) USERNAME="$OPTARG";;
+    s) SERVER="$OPTARG";;
+    c) CODE_BASE="$OPTARG";;
+    r) REMOTE_PATH="$OPTARG";;
+    e) EXCLUSIONS="$OPTARG";;
+    l) LOG_FILE="$OPTARG";;
+    h) usage;;
+    *) usage;;
+  esac
+done
+
+#: make required files and directories
+if [ ! -d $DEFAULT_LOG_PATH ]; then
+  mkdir $DEFAULT_LOG_PATH
+fi
+
+# --------------------
+# Paramater Validation
+# --------------------
+if [ ! $USERNAME ]; then
+  echo -e "Username must be specified\n"
+  usage
+  exit 1
+fi
+
+if [ ! $SERVER ]; then
+  echo -e "Server must be specified\n"
+  usage
+  exit 1
+fi
+
+if [ ! $CODE_BASE ]; then
+  echo -e "Codebase must be specifie\n"
+  usage
+  exit 1
+fi
+
+if [ ! $REMOTE_PATH ]; then
+  echo -e "Remote path must be specified\n"
+  usage
+  exit 1
+fi
+
+if [ ! -d $BASE_PATH/$CODE_BASE ]; then
+  echo "Codebase $CODE_BASE is invalid"
+  usage
+  exit 1
+fi
+
+# ------------------
+# Compile Exclusions
+# ------------------
+EXCLUSION_PARAMS=""
+if [ $EXCLUSIONS ]; then
+  for EX in EXCLUSIONS; do
+    EXCLUSION_PARAMS="--exclude='$EX' "
+  done
+fi
+
+#: rsync it!
+/usr/bin/rsync --verbose $EXCLUSION_PARAMS \
+  --progress --stats --compress --rsh=/usr/bin/ssh \
+  --recursive --times --links --omit-dir-times --delete \
+  $CODE_BASE $USERNAME@$SERVER:$REMOTE_PATH > $LOG_FILE

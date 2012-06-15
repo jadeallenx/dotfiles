@@ -1,0 +1,6 @@
+*~
+._.DS_Store
+.DS_Store
+*.pyc
+*.gz
+saved_certs
