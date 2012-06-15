@@ -174,7 +174,7 @@ alias lsp="printf '$PWD/%s\n' *"
 
 # Python brew
 if [ -f $HOME/.pythonbrew/etc/bashrc ]; then
-  source /Users/glenbot/.pythonbrew/etc/bashrc
+  source $HOME/.pythonbrew/etc/bashrc
 fi
 
 # Perl
