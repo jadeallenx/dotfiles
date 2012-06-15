@@ -29,10 +29,13 @@ install-screen:
 	ln -s `pwd`/screen/screenrc ~/.screenrc
 
 install-bin:
+	mkdir -p ~/bin
 	rm -f ~/bin/amail ~/bin/gethosts ~/bin/sync_code
+	rm -f ~/bin/hub
 	ln -s `pwd`/bin/amail ~/bin/amail
 	ln -s `pwd`/bin/gethosts ~/bin/gethosts
 	ln -s `pwd`/bin/sync_code ~/bin/sync_code
+	ln -s `pwd`/bin/hub ~/bin/hub
 
 install-vcprompt:
 	rm -f ~/bin/vcprompt
