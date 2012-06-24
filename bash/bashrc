@@ -55,7 +55,7 @@ export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_USER_COLOR}\u \
 \e${MITSUHIKOS_GRAY_COLOR}at \e${MITSUHIKOS_ORANGE_COLOR}\h \
 \e${MITSUHIKOS_GRAY_COLOR}in \e${MITSUHIKOS_GREEN_COLOR}\w\
 `mitsuhikos_lastcommandfailed`\
-\e${MITSUHIKOS_GRAY_COLOR}$(mitsuhikos_vcprompt)\
+\e${MITSUHIKOS_GRAY_COLOR}`mitsuhikos_vcprompt`\
 `mitsuhikos_backgroundjobs`\
 `mitsuhikos_virtualenv`\
 \e${MITSUHIKOS_DEFAULT_COLOR}'
