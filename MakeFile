@@ -39,4 +39,6 @@ install-bin:
 
 install-vcprompt:
 	rm -f ~/bin/vcprompt
-	ln -s `pwd`/vcprompt/vcprompt ~/bin/vcprompt
+	cd `pwd`/vcprompt && make
+	cp -p `pwd`/vcprompt/vcprompt ~/bin
+	rm -f `pwd`/vcprompt/vcprompt
