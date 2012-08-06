@@ -1,7 +1,13 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-export EDITOR=vim
+OS=$(uname)
+
+if [ $OS == "Darwin" ]; then
+  export EDITOR='sublime -w'
+else
+  export EDITOR=vim
+fi
 
 MITSUHIKOS_DEFAULT_COLOR="[00m"
 MITSUHIKOS_GRAY_COLOR="[37m"
@@ -208,3 +214,6 @@ if [ -f $HOME/.bash_private ]; then
   . $HOME/.bash_private
 fi
 
+if [ -f $HOME/bash_completion/knife ]; then
+  . $HOME/bash_completion/knife
+fi
