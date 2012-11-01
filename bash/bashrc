@@ -45,7 +45,7 @@ mitsuhikos_backgroundjobs() {
         string = "%s, and %s" % (", ".join(items[:-1]), items[-1])
       else:
         string = ", ".join(items)
-      print "\033[37m running %s" % string
+      print("\033[37m running %s" % string)
   '
 }
 
@@ -57,7 +57,8 @@ mitsuhikos_virtualenv() {
   fi
 }
 
-export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_USER_COLOR}\u \
+export PRE_PS1=""
+export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_ORANGE_COLOR}$PRE_PS1\e${MITSUHIKOS_USER_COLOR}\u \
 \e${MITSUHIKOS_GRAY_COLOR}at \e${MITSUHIKOS_ORANGE_COLOR}\h \
 \e${MITSUHIKOS_GRAY_COLOR}in \e${MITSUHIKOS_GREEN_COLOR}\w\
 `mitsuhikos_lastcommandfailed`\
