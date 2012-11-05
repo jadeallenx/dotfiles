@@ -94,7 +94,7 @@ fi
 export ARCHFLAGS="-arch i386 -arch x86_64"
 
 # add some bins
-export PATH=$PATH:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH=/usr/local/bin:/usr/local/sbin:~/bin:$PATH
 
 # Subversion
 svndiff()

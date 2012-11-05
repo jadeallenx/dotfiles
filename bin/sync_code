@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 #: usage 
 #: sync_code -u gzangirolami -s ebin -c ~/Alertlogic/repos/git/user-interface/ -r /home/gzangirolami/public_html/user-interface
@@ -46,38 +46,38 @@ do
 done
 
 #: make required files and directories
-if [ ! -d $DEFAULT_LOG_PATH ]; then
-  mkdir $DEFAULT_LOG_PATH
+if [ ! -d "$DEFAULT_LOG_PATH" ]; then
+  mkdir "$DEFAULT_LOG_PATH"
 fi
 
 # --------------------
 # Paramater Validation
 # --------------------
-if [ ! $USERNAME ]; then
+if [ ! "$USERNAME" ]; then
   echo -e "Username must be specified\n"
   usage
   exit 1
 fi
 
-if [ ! $SERVER ]; then
+if [ ! "$SERVER" ]; then
   echo -e "Server must be specified\n"
   usage
   exit 1
 fi
 
-if [ ! $CODE_BASE ]; then
-  echo -e "Codebase must be specifie\n"
+if [ ! "$CODE_BASE" ]; then
+  echo -e "Codebase must be specified\n"
   usage
   exit 1
 fi
 
-if [ ! $REMOTE_PATH ]; then
+if [ ! "$REMOTE_PATH" ]; then
   echo -e "Remote path must be specified\n"
   usage
   exit 1
 fi
 
-if [ ! -d $BASE_PATH/$CODE_BASE ]; then
+if [ ! -d "$BASE_PATH/$CODE_BASE" ]; then
   echo "Codebase $CODE_BASE is invalid"
   usage
   exit 1
@@ -86,15 +86,15 @@ fi
 # ------------------
 # Compile Exclusions
 # ------------------
-EXCLUSION_PARAMS=""
-if [ $EXCLUSIONS ]; then
-  for EX in EXCLUSIONS; do
-    EXCLUSION_PARAMS="--exclude='$EX' "
+if [ "$EXCLUSIONS" ]; then
+  for EX in $EXCLUSIONS; do
+    PARAM="--exclude=$EX"
+    EXCLUDE_PARAMS=("${EXCLUDE_PARAMS[@]}" "$PARAM")
   done
 fi
 
-#: rsync it!
-/usr/bin/rsync --verbose $EXCLUSION_PARAMS \
-  --progress --stats --compress --rsh=/usr/bin/ssh \
+#: rsync it!]
+(cd $CODE_BASE && /usr/bin/rsync --verbose --progress --stats --compress --rsh=/usr/bin/ssh \
   --recursive --times --links --omit-dir-times --delete \
-  $CODE_BASE $USERNAME@$SERVER:$REMOTE_PATH > $LOG_FILE
+  ${EXCLUDE_PARAMS[*]} \
+  $CODE_BASE $USERNAME@$SERVER:$REMOTE_PATH > $LOG_FILE)
