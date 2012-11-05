@@ -96,5 +96,5 @@ fi
 #: rsync it!]
 (cd $CODE_BASE && /usr/bin/rsync --verbose --progress --stats --compress --rsh=/usr/bin/ssh \
   --recursive --times --links --omit-dir-times --delete \
-  ${EXCLUDE_PARAMS[*]} \
+  ${EXCLUDE_PARAMS[@]} \
   $CODE_BASE $USERNAME@$SERVER:$REMOTE_PATH > $LOG_FILE)
